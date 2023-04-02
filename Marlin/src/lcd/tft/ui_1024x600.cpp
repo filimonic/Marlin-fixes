@@ -741,10 +741,14 @@ static void moveAxis(const AxisEnum axis, const int8_t direction) {
     // Delta limits XY based on the current offset from center
     // This assumes the center is 0,0
     #if ENABLED(DELTA)
+      #if defined(E_AXIS) && defined(Z_AXIS)
       if (axis != Z_AXIS && axis != E_AXIS) {
+      #endif
         max = SQRT(sq(float(PRINTABLE_RADIUS)) - sq(current_position[Y_AXIS - axis])); // (Y_AXIS - axis) == the other axis
         min = -max;
+      #if defined(E_AXIS) && defined(Z_AXIS)
       }
+      #endif
     #endif
 
     // Get the new position
@@ -780,7 +784,9 @@ static void z_minus() { moveAxis(Z_AXIS, -1); }
 
     quick_feedback();
     drawCurESelection();
+    #if defined(E_AXIS)
     drawAxisValue(E_AXIS);
+    #endif
   }
 
   static void do_home() {
@@ -789,7 +795,9 @@ static void z_minus() { moveAxis(Z_AXIS, -1); }
     queue.inject_P(G28_STR);
     // Disable touch until home is done
     TERN_(TOUCH_SCREEN, touch.disable());
+    #if defined(E_AXIS)
     drawAxisValue(E_AXIS);
+    #endif
     drawAxisValue(X_AXIS);
     drawAxisValue(Y_AXIS);
     drawAxisValue(Z_AXIS);
@@ -859,7 +867,9 @@ void MarlinUI::move_axis_screen() {
   // ROW 1 -> E- Y- CurY Z+
   int x = X_MARGIN, y = Y_MARGIN, spacing = 0;
 
+  #if defined(E_AXIS)
   drawBtn(x, y, "E+", (intptr_t)e_plus, imgUp, E_BTN_COLOR, !busy);
+  #endif
 
   spacing = (TFT_WIDTH - X_MARGIN * 2 - 3 * BTN_WIDTH) / 2;
   x += BTN_WIDTH + spacing;
@@ -907,12 +917,16 @@ void MarlinUI::move_axis_screen() {
   x = X_MARGIN;
   spacing = (TFT_WIDTH - X_MARGIN * 2 - 3 * BTN_WIDTH) / 2;
 
+  #if defined(E_AXIS)
   drawBtn(x, y, "E-", (intptr_t)e_minus, imgDown, E_BTN_COLOR, !busy);
+  #endif
 
   // Cur E
   motionAxisState.eValuePos.x = x;
   motionAxisState.eValuePos.y = y + BTN_HEIGHT + 2;
+  #if defined(E_AXIS)
   drawAxisValue(E_AXIS);
+  #endif
 
   // Cur X
   motionAxisState.xValuePos.x = BTN_WIDTH + (TFT_WIDTH - X_MARGIN * 2 - 5 * BTN_WIDTH) / 4; //X- pos
