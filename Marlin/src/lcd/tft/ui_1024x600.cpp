@@ -286,6 +286,7 @@ void MarlinUI::draw_status_screen() {
       tft_string.set(ftostr4sign(LOGICAL_Y_POSITION(current_position.y)));
     tft.add_text(600 - tft_string.width(), 3, nhy ? COLOR_AXIS_NOT_HOMED : COLOR_AXIS_HOMED, tft_string);
   }
+  #if defined(Z_AXIS)
   tft.add_text(800, 3, COLOR_AXIS_HOMED , "Z");
   uint16_t offset = 32;
   const bool nhz = axis_should_home(Z_AXIS);
@@ -301,6 +302,7 @@ void MarlinUI::draw_status_screen() {
     offset -= tft_string.width();
   }
   tft.add_text(900 - tft_string.width() - offset, 3, nhz ? COLOR_AXIS_NOT_HOMED : COLOR_AXIS_HOMED, tft_string);
+  #endif
   TERN_(TOUCH_SCREEN, touch.add_control(MOVE_AXIS, 4, y, TFT_WIDTH - 8, FONT_LINE_HEIGHT));
 
   y += 100;
@@ -662,7 +664,9 @@ static void drawAxisValue(const AxisEnum axis) {
   switch (axis) {
     case X_AXIS: pos = motionAxisState.xValuePos; color = X_BTN_COLOR; break;
     case Y_AXIS: pos = motionAxisState.yValuePos; color = Y_BTN_COLOR; break;
+    #if defined(Z_AXIS)
     case Z_AXIS: pos = motionAxisState.zValuePos; color = Z_BTN_COLOR; break;
+    #endif
     #if defined(E_AXIS)
     case E_AXIS: pos = motionAxisState.eValuePos; color = E_BTN_COLOR; break;
     #endif
@@ -686,6 +690,7 @@ static void moveAxis(const AxisEnum axis, const int8_t direction) {
 
   const float diff = motionAxisState.currentStepSize * direction;
 
+  #if defined(Z_AXIS)
   if (axis == Z_AXIS && motionAxisState.z_selection == Z_SELECTION_Z_PROBE) {
     #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
       const int16_t babystep_increment = direction * BABYSTEP_SIZE_Z;
@@ -726,6 +731,7 @@ static void moveAxis(const AxisEnum axis, const int8_t direction) {
     #endif
     return;
   }
+  #endif
 
   if (!ui.manual_move.processing) {
     // Get motion limit from software endstops, if any
