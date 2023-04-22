@@ -3453,10 +3453,9 @@
 // _ALFISYS: Enable laser feature
 #define LASER_FEATURE
 #if EITHER(SPINDLE_FEATURE, LASER_FEATURE)
-  // _ALFISYS: Laser will be powered from hotbed contacts
-  #define SPINDLE_LASER_ENA_PIN HEATER_BED_PIN
-    // _ALFISYS: Laser will be powered from hotbed contacts, and HIGH is active
-  #define SPINDLE_LASER_ACTIVE_STATE    HIGH   // Set to "HIGH" if SPINDLE_LASER_ENA_PIN is active HIGH
+  // _ALFISYS: Laser will be powered from hotbed contacts, but we use PS_ON_PIN here
+  // #define SPINDLE_LASER_ACTIVE_STATE    LOW    // Set to "HIGH" if SPINDLE_LASER_ENA_PIN is active HIGH
+
 
   #define SPINDLE_LASER_USE_PWM                // Enable if your controller supports setting the speed/power
   #if ENABLED(SPINDLE_LASER_USE_PWM)
