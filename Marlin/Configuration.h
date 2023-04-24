@@ -442,6 +442,7 @@
     // #define AUTO_POWER_CHAMBER_FAN
     // _ALFISYS: Cooler Fans do not need power
     //#define AUTO_POWER_COOLER_FAN
+    #define AUTO_POWER_SPINDLE_LASER
     // _ALFISYS: Turn off power if machine is delayed for this time
     #define POWER_TIMEOUT              60 // (s) Turn off power if the machine is idle for this duration
     // #define POWER_OFF_DELAY         60 // (s) Delay of poweroff after M81 command. Useful to let fans run for extra time.
